@@ -29,14 +29,16 @@ void set_gear_wheel_rotate_direction(string *gear_wheels, int current_gear_wheel
     for(int i = current_gear_wheel; i > 0; i--) {
         if(gear_wheels[i][6] != gear_wheels[i - 1][2]) {
             gear_wheel_rotate_directions[i - 1] = -gear_wheel_rotate_directions[i];
-        }
+        } else
+            break;
     }
     
     // 오른쪽 톱니바퀴 방향 설정
     for(int i = current_gear_wheel; i < 3; i++) {
         if(gear_wheels[i][2] != gear_wheels[i + 1][6]) {
             gear_wheel_rotate_directions[i + 1] = -gear_wheel_rotate_directions[i];
-        }
+        } else
+            break;
     }
 }
 
