@@ -7,17 +7,17 @@ vector<vector<int>> vertexs;
 vector<int> colors;
 bool isBipartiteGraph;
 
-void DFS(int start_vertex, int color) {
-    colors[start_vertex] = color;
+void DFS(int cur_vertex, int color) {
+    colors[cur_vertex] = color;
     
-    for(int i = 0; i < vertexs[start_vertex].size(); i++) {
-        if(colors[vertexs[start_vertex][i]] == color) {
+    for(int i = 0; i < (int)vertexs[cur_vertex].size(); i++) {
+        if(colors[vertexs[cur_vertex][i]] == color) {
             isBipartiteGraph = false;
             return;
         }
         
-        if(colors[vertexs[start_vertex][i]] == 0) {
-            DFS(vertexs[start_vertex][i], -color);
+        if(colors[vertexs[cur_vertex][i]] == 0) {
+            DFS(vertexs[cur_vertex][i], -color);
         }
     }
 }
@@ -35,11 +35,7 @@ int main(void) {
         cin >> v >> e;
         
         vertexs.resize(v + 1);
-        colors.resize(v + 1);
-        
-        for(int i = 1; i <= v; i++) {
-            colors[i] = 0;
-        }
+        colors.resize(v + 1, 0);
         
         for(int i = 0; i < e; i++) {
             int a, b;
