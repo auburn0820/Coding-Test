@@ -8,7 +8,7 @@ int city[101][101];
 
 #define INF 987654321
 
-void floyed_washall() {
+void floyd_washall() {
     // i : mid, j : src, k : dst
     for(int i = 1; i <= n; i++) {
         for(int j = 1; j <= n; j++) {
@@ -52,6 +52,6 @@ int main(void) {
             city[src][dst] = cost;
     }
     
-    floyed_washall();
+    floyd_washall();
     print_city_arr();
 }
