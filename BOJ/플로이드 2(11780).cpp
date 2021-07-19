@@ -70,7 +70,6 @@ int main(void) {
             city[src][dst] = cost;
         }
     }
-    
     floyd_warshall();
     print_city_arr();
     
