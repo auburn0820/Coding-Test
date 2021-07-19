@@ -18,17 +18,17 @@ void check_chicken_house_distance(int chicken_house_one, int chicken_house_two) 
     for(int i = 1; i <= N; i++) {
         if(chicken_house_one == i || chicken_house_one == i)
             continue;
-        
+
         total_distance += min(city[chicken_house_one][i], city[chicken_house_two][i]) * 2;
     }
-    
+
     if(result_dist > total_distance) {
         result_city = {chicken_house_one, chicken_house_two};
         result_dist = total_distance;
     }
 }
 
-void get_chicken_house_location() {
+void find_min_chicken_house_location() {
     for(int i = 1; i <= N; i++) {
         for(int j = 1; j <= N; j++) {
             check_chicken_house_distance(i, j);
@@ -59,19 +59,19 @@ void set_city_dist() {
 
 int main(void) {
     cin >> N >> M;
-    
+
     set_city_dist();
-    
+
     for(int i = 0; i < M; i++) {
         int src, dst;
         cin >> src >> dst;
-        
+
         city[src][dst] = 1;
         city[dst][src] = 1;
     }
-    
+
     floyd_warshall();
-    get_chicken_house_location();
-    
+    find_min_chicken_house_location();
+
     cout << result_city.first << ' ' << result_city.second << ' ' << result_dist << '\n';
 }
