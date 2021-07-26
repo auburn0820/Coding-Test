@@ -42,16 +42,6 @@ void water_bfs() {
     }
 }
 
-void print_maps() {
-    cout << '\n';
-    for(int i = 0; i < R; i++) {
-        for(int j = 0; j < C; j++) {
-            cout << maps[i][j];
-        }
-        cout << '\n';
-    }
-}
-
 int hedgehog_bfs() {
     int size = (int)q.size();
     while(size--) {
