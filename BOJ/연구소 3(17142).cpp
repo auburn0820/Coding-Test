@@ -1,118 +1,137 @@
-//#include <iostream>
-//#include <vector>
-//#include <queue>
-//#include <cstring>
-//#include <climits>
-//
-//using namespace std;
-//
-//int N, M;
-//int lab[50][50];
-//int copyLab[50][50];
-//vector<pair<int, int>> virusLocationInfo;
-//vector<pair<int, int>> activatedVirusLocationInfo;
-//int dx[] = {1, -1, 0, 0}, dy[] = {0, 0, 1, -1};
-//int minTime = INT_MAX;
-//bool flag;
-//
-//struct VirusInfo {
-//    int y, x, cnt;
-//};
-//
-//bool checkIfVirusFullySpread() {
-//    for(int i = 0; i < N; i++) {
-//        for(int j = 0; j < N; j++) {
-//            if(copyLab[i][j] == 0)
-//                return false;
-//        }
-//    }
-//    flag = true;
-//    return true;
-//}
-//
-//int spreadActivatedVirus() {
-//    queue<VirusInfo> q;
-//    int time = -1;
-//    for(auto i : activatedVirusLocationInfo) {
-//        q.push({i.first, i.second, 0});
-//    }
-//    
-//    while(!q.empty()) {
-//        int size = (int)q.size();
-//        while(size--) {
-//            int curX = q.front().x;
-//            int curY = q.front().y;
-//            int curCnt = q.front().cnt;
-//            q.pop();
-//            time = max(time, curCnt);
-//            
-//            for(int i = 0; i < 4; i++) {
-//                int nextX = curX + dx[i];
-//                int nextY = curY + dy[i];
-//                
-//                if(nextX < 0 || nextX >= N || nextY < 0 || nextY >= N)
-//                    continue;
-//                if(copyLab[nextY][nextX] != 0)
-//                    continue;
-//                
-//                q.push({nextY, nextX, curCnt + 1});
-//                copyLab[nextY][nextX] = curCnt + 1;
-//            }
-//        }
-//    }
-//    
-//    return time;
-//}
-//
-//void activateVirus() {
-//    memcpy(copyLab, lab, sizeof(lab));
-//    
-//    for(auto i : activatedVirusLocationInfo) {
-//        int x = i.second;
-//        int y = i.first;
-//        // 활성 바이러스 -1로 설정
-//        copyLab[y][x] = -1;
-//    }
-//}
-//
-//void virusCombination(int idx, int cnt) {
-//    if(cnt == M) {
-//        int time;
-//        activateVirus();
-//        time = spreadActivatedVirus();
-//        if(checkIfVirusFullySpread())
-//            minTime = min(minTime, time);
-//        return;
-//    }
-//    
-//    for(int i = idx; i < (int)virusLocationInfo.size(); i++) {
-//        activatedVirusLocationInfo.push_back({virusLocationInfo.at(i)});
-//        virusCombination(i, cnt + 1);
-//        activatedVirusLocationInfo.pop_back();
-//    }
-//}
-//
-//int main(void) {
-//    cin >> N >> M;
-//    
-//    for(int i = 0; i < N; i++) {
-//        for(int j = 0; j < N; j++) {
-//            cin >> lab[i][j];
-//            if(lab[i][j] == 2) {
-//                virusLocationInfo.push_back({i, j});
-//                // 바이러스 -2로 설정
-//                lab[i][j] = -2;
-//            } else if(lab[i][j] == 1) {
-//                // 벽
-//                lab[i][j] = -3;
-//            }
-//        }
-//    }
-//    
-//    virusCombination(0, 0);
-//    
-//    if(minTime == INT_MAX)
-//        cout << -1 << '\n';
-//    else
-//        cout << minTime << '\n';
-//}
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+#define WALL -1
+#define SLEEPING_VIRUS -2
+
+int N, M;
+int lab[50][50];
+int copied_lab[50][50];
+bool visit[50][50];
+vector<pair<int, int>> virus_loc;
+vector<pair<int, int>> activated_virus_loc;
+int min_result = INT_MAX;
+int dx[] = {1, -1, 0, 0}, dy[] = {0, 0, 1, -1};
+
+struct ActivatedVirusLocInfo {
+    int x, y, cnt;
+};
+
+void copy_lab() {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            if(lab[i][j] == 1)
+                copied_lab[i][j] = WALL;
+            else if(lab[i][j] == 2)
+                copied_lab[i][j] = SLEEPING_VIRUS;
+            else
+                copied_lab[i][j] = 0;
+        }
+    }
+}
+
+int find_max_value() {
+    int max_value = -1;
+    
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            if(!visit[i][j])
+                return -1;
+            else if(0 <= copied_lab[i][j])
+                max_value = max(copied_lab[i][j], max_value);
+        }
+    }
+    
+    return max_value;
+}
+
+void set_visit() {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            if(copied_lab[i][j] == WALL)
+                visit[i][j] = true;
+            else
+                visit[i][j] = false;
+        }
+    }
+}
+
+void spread_virus() {
+    copy_lab();
+    set_visit();
+    queue<ActivatedVirusLocInfo> q;
+    
+    for(auto &i : activated_virus_loc) {
+        q.push({i.first, i.second, 0});
+        copied_lab[i.second][i.first] = 0;
+        visit[i.second][i.first] = true;
+    }
+    
+    while(!q.empty()) {
+        int cur_x = q.front().x;
+        int cur_y = q.front().y;
+        int cur_cnt = q.front().cnt;
+        
+        q.pop();
+        
+        for(int i = 0; i < 4; i++) {
+            int next_x = cur_x + dx[i];
+            int next_y = cur_y + dy[i];
+            
+            if(next_x < 0 || next_y < 0 || next_x >= N || next_y >= N)
+                continue;
+            if(visit[next_y][next_x])
+                continue;
+            if(copied_lab[next_y][next_x] == SLEEPING_VIRUS)
+                copied_lab[next_y][next_x] = 0;
+            else if(copied_lab[next_y][next_x] == 0)
+                copied_lab[next_y][next_x] = cur_cnt + 1;
+            
+            q.push({next_x, next_y, cur_cnt + 1});
+            visit[next_y][next_x] = true;
+        }
+    }
+}
+
+void comb_activation_virus(int idx, int cnt) {
+    if(cnt == M) {
+        spread_virus();
+        int result = find_max_value();
+        
+        if(result != -1)
+            min_result = min(result, min_result);
+        return;
+    }
+    
+    for(int i = idx; i < (int)virus_loc.size(); i++) {
+        activated_virus_loc.push_back(virus_loc[i]);
+        comb_activation_virus(i + 1, cnt + 1);
+        activated_virus_loc.pop_back();
+    }
+}
+
+int main(void) {
+    cin >> N >> M;
+    
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            cin >> lab[i][j];
+            
+            if(lab[i][j] == 2)
+                virus_loc.push_back({j, i});
+        }
+    }
+    
+    comb_activation_virus(0, 0);
+    
+    if(min_result == INT_MAX)
+        min_result = -1;
+    
+    cout << min_result << '\n';
+}
