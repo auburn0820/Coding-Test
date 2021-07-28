@@ -23,7 +23,7 @@ bool can_palindrome_left(string& s) {
     int reverse_idx = (int)s.length() - 1;
     int remove_cnt = 0;
     
-    while(idx < reverse_idx) {
+    while(idx <= reverse_idx) {
         if(s[idx] != s[reverse_idx]) {
             remove_cnt++;
             idx++;
@@ -45,7 +45,7 @@ bool can_palindrome_right(string &s) {
     int reverse_idx = (int)s.length() - 1;
     int remove_cnt = 0;
     
-    while(idx < reverse_idx) {
+    while(idx <= reverse_idx) {
         if(s[idx] != s[reverse_idx]) {
             remove_cnt++;
             reverse_idx--;
