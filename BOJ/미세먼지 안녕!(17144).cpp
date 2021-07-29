@@ -44,7 +44,6 @@ void find_spread_dust() {
                 spread_dust(j, i);
         }
     }
-    add_dust_value();
 }
 
 void turn_air_purifier() {
@@ -129,6 +128,7 @@ int main(void) {
     
     while(T--) {
         find_spread_dust();
+        add_dust_value();
         turn_air_purifier();
     }
     cout << print_remain_dust() << '\n';
