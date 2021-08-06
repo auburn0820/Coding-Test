@@ -9,21 +9,15 @@ char map[10001][501];
 bool is_visited[10001][501];
 int move_dir[] = {-1, 0, 1};
 int result = 0;
-bool is_search_ended = false;
 
-void find_path(int x, int y) {
+int find_path(int x, int y) {
     is_visited[y][x] = true;
     
     if(x == C - 1) {
-        result++;
-        is_search_ended = true;
-        return;
+        return 1;
     }
     
     for(int i = 0; i < 3; i++) {
-        if(is_search_ended)
-            return;
-        
         int next_x = x + 1;
         int next_y = y + move_dir[i];
         
@@ -33,14 +27,15 @@ void find_path(int x, int y) {
             continue;
         if(map[next_y][next_x] == 'x')
             continue;
-        
-        find_path(next_x, next_y);
+        if(find_path(next_x, next_y) == 1)
+            return 1;
     }
+    
+    return 0;
 }
 
 int main(void) {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+    cin.sync_with_stdio(0);
     
     cin >> R >> C;
     
@@ -53,8 +48,7 @@ int main(void) {
     }
     
     for(int i = 0; i < R; i++) {
-        is_search_ended = false;
-        find_path(0, i);
+        result += find_path(0, i);
     }
     
     cout << result << '\n';
