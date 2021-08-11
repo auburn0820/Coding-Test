@@ -17,14 +17,6 @@ void floyd_warshall() {
             }
         }
     }
-    
-//    for(int i = 1; i <= N; i++) {
-//        for(int j = 1; j <= N; j++) {
-//            cout << dist[i][j] << ' ';
-//        }
-//        cout << '\n';
-//    }
-    
 }
 
 void set_dist_arr() {
