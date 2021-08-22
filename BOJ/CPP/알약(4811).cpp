@@ -25,16 +25,12 @@ long long get_number_of_str(int N) {
 }
 
 int main(void) {
-    int idx = 0;
+    int N;
     
-    while(idx < 1000) {
-        int N;
-        cin >> N;
-        
-        if(N == 0)
-            break;
-        
+    cin >> N;
+    while(N != 0) {
         set_DP_arr(N);
         cout << get_number_of_str(N) << '\n';
+        cin >> N;
     }
 }
