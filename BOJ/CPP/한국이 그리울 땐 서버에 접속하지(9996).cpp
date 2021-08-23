@@ -1,47 +1,42 @@
-//#include <iostream>
-//#include <vector>
-//#include <cstring>
-//
-//using namespace std;
-//
-//int main(void) {
-////    int N;
-////    string pattern;
-////    cin >> N >> pattern;
-////    vector<char> v;
-////    bool exist[100];
-////
-////    for(int i = 0; i < (int)pattern.length(); i++) {
-////        if(pattern[i] != '*')
-////            v.push_back(pattern[i]);
-////    }
-////
-////    while(N--) {
-////        memset(exist, false, sizeof(exist));
-////        string temp;
-////        cin >> temp;
-////
-////        if(v.size() > temp.length())
-////            cout << "NE\n"; continue;
-////
-////        for(int i = 0; i < (int)v.size(); i++) {
-////            for(int j = 0; j < (int)temp.size(); j++) {
-////                if(v[i] == temp[j]) {
-////                    exist[i] = true;
-////                    i++;
-////                }
-////                else
-////                    continue;
-////            }
-////        }
-////
-////        for(int i = 0; i < (int)v.size(); i++) {
-////            if(exist[i] == false)
-////                cout << "NE\n";
-////            else {
-////                if(i == (int)v.size() - 1)
-////                    cout << "DA\n";
-////            }
-////        }
-////    }
-//}
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int N;
+string pattern;
+
+int main(void) {
+    cin >> N;
+    cin >> pattern;
+    
+    string left = "";
+    string right = "";
+    int i = 0;
+    for(; pattern[i] != '*'; i++)
+        left += pattern[i];
+    
+    i++;
+    
+    for(; i < (int)pattern.length(); i++)
+        right += pattern[i];
+    
+    reverse(right.begin(), right.end());
+    
+    for(int i = 0; i < N; i++) {
+        string str;
+        cin >> str;
+        
+        if(str.substr(0, (int)left.length()) == left) {
+            str = str.substr((int)left.length(), (int)str.length());
+            reverse(str.begin(), str.end());
+            
+            if(str.substr(0, (int)right.length()) == right) {
+                cout << "DA\n";
+                continue;
+            }
+        }
+        
+        cout << "NE\n";
+    }
+}
