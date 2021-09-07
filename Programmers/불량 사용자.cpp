@@ -64,26 +64,17 @@ void comb(int cur, vector<string> &user_id, vector<string> &banned_id, vector<st
         if(banned_id_cnt == banned_id.size()) {
             string key;
             
+            sort(temp_id.begin(), temp_id.end());
+            
             // 순열을 통해 뽑기 때문에 같은 경우가 있는지 확인
             for(auto &i : temp_id)
                 key += i;
             
             auto it = for_unique.find(key);
             
-            // 유일한 경우를 뽑았을 때
             if(it == for_unique.end()) {
+                for_unique.insert(key);
                 answer++;
-                
-                sort(temp_id.begin(), temp_id.end());
-                
-                // 순열을 통해 키 값을 섞은 후, Set에 삽입
-                do {
-                    key.clear();
-                    for(int i = 0; i < temp_id.size(); i++) {
-                        key += temp_id[i];
-                    }
-                    for_unique.insert(key);
-                } while(next_permutation(temp_id.begin(), temp_id.end()));
             }
         }
         return;
