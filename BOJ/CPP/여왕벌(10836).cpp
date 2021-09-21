@@ -24,10 +24,6 @@ int main(void) {
         }
     }
     
-    for(auto &i : grow)
-        cout << i << ' ';
-    cout << endl;
-    
     for(int i = 0; i < M; i++) {
         for(int j = 0; j < M; j++) {
             if(j == 0)
