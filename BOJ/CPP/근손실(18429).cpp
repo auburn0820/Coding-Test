@@ -1,42 +1,39 @@
-////
-////  근손실(18429).cpp
-////  알고리즘
-////
-////  Created by 피수영 on 2020/11/04.
-////  Copyright © 2020 피수영. All rights reserved.
-////
-//
-//#include <iostream>
-//
-//using namespace std;
-//
-//int total = 0;
-//
-//void DFS(int cur, bool *visit, int *arr, int n, int cnt) {
-//    if(visit[cur])
-//        return;
-//    
-//    if(cnt == n) {
-//        
-//    }
-//    
-//    visit[cur] = true;
-//    
-//    for(int i = 0; i < n; i++) {
-//        DFS(arr[i], visit, arr, n, cnt + 1);
-//    }
-//    
-//    visit[cur] = false;
-//}
-//
-//int main(void) {
-//    int n, k;
-//    cin >> n >> k;
-//    int kit[n];
-//    
-//    for(int i = 0; i < n; i++) {
-//        cin >> kit[i];
-//    }
-//    
-//    
-//}
+#include <iostream>
+
+using namespace std;
+
+int N, K;
+int kit[8] = {0, };
+bool is_used[8] = {false, };
+int result = 0;
+
+void find_cases(int weights, int day) {
+    if(weights < 500) {
+        return;
+    }
+    
+    if(day == N) {
+        result++;
+        return;
+    }
+    
+    for(int i = 0; i < N; i++) {
+        if(is_used[i])
+            continue;
+        is_used[i] = true;
+        find_cases(weights - K + kit[i], day + 1);
+        is_used[i] = false;
+    }
+}
+
+int main(void) {
+    cin >> N >> K;
+    
+    for(int i = 0; i < N; i++) {
+        cin >> kit[i];
+    }
+    
+    find_cases(500, 0);
+    
+    cout << result << '\n';
+}
